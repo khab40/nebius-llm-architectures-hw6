@@ -1,0 +1,23 @@
+[project]
+name = "hw6-efficient-fine-tuning"
+version = "2026.4.0"
+description = "Nebius Academy homework for efficient fine-tuning with prompt tuning and LoRA."
+readme = "README.md"
+requires-python = ">=3.14,<3.15"
+dependencies = [
+    "datasets>=4.4.0",
+    "einops>=0.8.0",
+    "gdown>=5.2.0",
+    "ipykernel>=7.0.0",
+    "ipywidgets>=8.1.0",
+    "jupyterlab>=4.5.0",
+    "matplotlib>=3.10.9",
+    "peft>=0.18.0",
+    "torch>=2.9.0",
+    "torchvision>=0.26.0",
+    "tqdm>=4.67.0",
+    "transformers>=4.57.0",
+]
+
+[tool.uv]
+package = false
