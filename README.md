@@ -1,5 +1,7 @@
 # Homework 6: Tiny Transformer Language Model
 
+![Tiny LM GitHub banner](img/tiny-lm-github-banner.png)
+
 This folder contains notebook-based practice for building and running small language-modeling demos:
 
 - `src/tiny_transformer_lm.ipynb` is the homework notebook: implement a decoder-only Transformer language model from scratch.
