@@ -14,7 +14,7 @@ By the end, your model should generate text that looks roughly Shakespeare-like:
 
 ## What You Must Implement
 
-The notebook already provides the data pipeline, training loop, sanity checks, perplexity calculation, and sample generation. Your job is to complete the TODO sections in the model code.
+The notebook includes the data pipeline, completed `# DONE` model blocks, sanity checks, a baseline untrained sample, the training loop, timing summary, perplexity calculation, and sample generation.
 
 Implement:
 
@@ -24,7 +24,7 @@ Implement:
 4. `TinyTransformerLM`
 5. `TinyTransformerLM.generate`
 
-Do not rewrite the whole notebook. Keep your changes focused on the TODO blocks unless you are only adjusting the runtime device for local Apple Silicon execution.
+If you adapt the notebook for teaching, keep changes focused on the implementation blocks unless you are only adjusting runtime/device settings.
 
 ## Required Concepts
 
@@ -50,21 +50,17 @@ You may run the homework locally or in Nebius Cloud.
 
 Local VS Code execution is supported if PyTorch MPS is available.
 
-The notebook currently uses:
+The notebook currently uses a portable helper that selects CUDA, then MPS, then CPU:
 
 ```python
-device = "cuda" if torch.cuda.is_available() else "cpu"
-```
+def get_torch_device():
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
 
-For Apple Silicon GPU execution, replace it with:
-
-```python
-device = (
-    "cuda" if torch.cuda.is_available()
-    else "mps" if torch.backends.mps.is_available()
-    else "cpu"
-)
-print(f"Using device: {device}")
+device = get_torch_device()
 ```
 
 Run VS Code or Jupyter with:
@@ -77,10 +73,10 @@ PYTORCH_ENABLE_MPS_FALLBACK=1
 
 Nebius Cloud is recommended for the fastest and most reproducible full training run. A T4-class CUDA GPU is enough for this homework.
 
-The original device line should select CUDA automatically:
+The portable device helper should select CUDA automatically when a CUDA GPU is available:
 
 ```python
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = get_torch_device()
 ```
 
 More detailed run instructions are in:
@@ -131,19 +127,20 @@ PYTORCH_ENABLE_MPS_FALLBACK=1 uv run jupyter lab
 
 1. Run the setup and data cells.
 2. Review the hyperparameters.
-3. Implement `MultiHeadSelfAttention`.
+3. Review `MultiHeadSelfAttention`.
 4. Run the attention sanity check.
-5. Implement `FeedForward`.
+5. Review `FeedForward`.
 6. Run the feed-forward sanity check.
-7. Implement `Block`.
+7. Review `Block`.
 8. Run the block sanity check.
-9. Implement `TinyTransformerLM.forward`.
-10. Implement `TinyTransformerLM.generate`.
+9. Review `TinyTransformerLM.forward`.
+10. Review `TinyTransformerLM.generate`.
 11. Run the full-model sanity check.
-12. Train the model.
-13. Calculate validation perplexity and bits per character.
-14. Generate final text samples.
-15. Save the notebook with all cells executed.
+12. Generate the untrained baseline sample.
+13. Train the model and review the timing summary.
+14. Calculate validation perplexity and bits per character.
+15. Generate final text samples.
+16. Save the notebook with all cells executed.
 
 ## Questions To Answer
 
@@ -161,9 +158,11 @@ Include short answers in the notebook or in a short accompanying note:
 
 Submit the completed `src/tiny_transformer_lm.ipynb` notebook with:
 
-- all TODO sections implemented;
+- all `# DONE` implementation sections present;
 - all sanity checks passing;
+- untrained baseline sample visible;
 - training logs visible;
+- timing summary visible;
 - final loss values visible;
 - validation perplexity and bits per character visible;
 - generated text samples visible.
@@ -172,12 +171,12 @@ Submit the completed `src/tiny_transformer_lm.ipynb` notebook with:
 
 Your work is complete when:
 
-- no `raise NotImplementedError` lines remain in the TODO sections;
+- no `raise NotImplementedError` lines remain in the implementation sections;
 - all sanity-check cells pass;
 - the model trains without runtime errors;
 - final train loss is below `1.8`;
 - validation loss is reasonably close to train loss;
-- generated samples are mostly made of real-looking English words and punctuation;
+- trained generated samples are mostly made of real-looking English words and punctuation;
 - the notebook is saved with all cells executed.
 
 ## Practical Notes

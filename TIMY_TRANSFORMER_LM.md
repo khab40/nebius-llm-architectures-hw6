@@ -109,3 +109,14 @@ Generation repeats one-token sampling:
 6. Append that token to the context.
 
 Cropping to `block_size` is required because the positional embedding table has only `block_size` rows.
+
+The notebook also shows a short untrained sample before optimizer steps and a trained sample after fitting. The contrast makes the learning effect visible: random weights produce character noise, while the trained model produces Shakespeare-like line breaks, punctuation, speaker-name patterns, and word fragments.
+
+### Training Timing
+
+The training loop runs exactly `max_iters` optimizer steps, then performs a final evaluation. Its timing summary separates:
+
+- end-to-end runtime;
+- evaluation time;
+- train-only token throughput;
+- final train and validation loss.

@@ -17,15 +17,15 @@ src/tiny_transformer_lm.ipynb
 
 | Notebook | Purpose | Local Apple Silicon | Nebius Cloud |
 | --- | --- | --- | --- |
-| `src/tiny_transformer_lm.ipynb` | Homework: implement a tiny GPT-style Transformer LM | Recommended, with MPS device edit | Recommended for fastest/reproducible training |
+| `src/tiny_transformer_lm.ipynb` | Homework: tiny GPT-style Transformer LM | Recommended | Recommended for fastest/reproducible training |
 | `src/MNIST_Parallel_Hyperparameter_Tuning_Demo.ipynb` | Demo: parallel hyperparameter tuning | Recommended | Optional |
 | `src/efficient_fine_tuning.ipynb` | Demo: PEFT prompt tuning and LoRA | Possible with edits | Recommended |
 
 ## Homework Scope
 
-In `src/tiny_transformer_lm.ipynb`, students implement a decoder-only Transformer from scratch in PyTorch and train it on character-level Tiny Shakespeare.
+In `src/tiny_transformer_lm.ipynb`, students review a completed decoder-only Transformer implementation from scratch in PyTorch and train it on character-level Tiny Shakespeare.
 
-The required TODOs are:
+The completed `# DONE` implementation blocks are:
 
 - `MultiHeadSelfAttention`;
 - `FeedForward`;
@@ -33,13 +33,15 @@ The required TODOs are:
 - `TinyTransformerLM`;
 - autoregressive `generate`.
 
-The training loop, data loading, sanity checks, perplexity calculation, and sample generation are already provided.
+The training loop, data loading, sanity checks, untrained baseline sample, timing summary, perplexity calculation, and sample generation are included.
 
 Expected successful homework state:
 
 - all `raise NotImplementedError` lines are removed;
 - attention, feed-forward, block, and full-model sanity checks pass;
+- an untrained baseline sample is visible before training;
 - final train loss is below `1.8`;
+- the timing summary reports end-to-end runtime, evaluation time, and train-only throughput;
 - generated text looks roughly Shakespeare-like;
 - all notebook cells are executed before submission.
 
@@ -80,28 +82,20 @@ PYTORCH_ENABLE_MPS_FALLBACK=1 code .
 
 The fallback flag lets PyTorch run unsupported MPS operations on CPU instead of failing immediately.
 
-### 3. Enable Apple Silicon GPU in the homework notebook
+### 3. Confirm Apple Silicon GPU selection
 
-The notebook currently uses:
-
-```python
-device = "cuda" if torch.cuda.is_available() else "cpu"
-```
-
-On Apple Silicon this falls back to CPU, because Apple GPUs use `mps`, not `cuda`.
-
-For local GPU execution, replace that cell with:
+The notebook uses a portable device helper equivalent to:
 
 ```python
-device = (
-    "cuda" if torch.cuda.is_available()
-    else "mps" if torch.backends.mps.is_available()
-    else "cpu"
-)
-print(f"Using device: {device}")
+def get_torch_device():
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
 ```
 
-The rest of `src/tiny_transformer_lm.ipynb` already mostly uses `.to(device)`, so this single change should be enough for local MPS execution.
+On Apple Silicon, the setup cell should print `Using device: mps` when MPS is available.
 
 ### 4. Run the homework locally
 
@@ -110,11 +104,12 @@ Run the notebook in order:
 1. setup;
 2. data download and character vocabulary;
 3. hyperparameters;
-4. TODO implementations;
+4. `# DONE` implementation blocks;
 5. sanity checks;
-6. training;
-7. perplexity;
-8. sample generation.
+6. untrained baseline sample;
+7. training and timing summary;
+8. perplexity;
+9. trained sample generation.
 
 The default notebook settings are sized for a Colab T4. On Apple Silicon, runtime depends heavily on the chip and memory size.
 
@@ -142,7 +137,7 @@ If MPS errors occur, start Jupyter/VS Code with:
 PYTORCH_ENABLE_MPS_FALLBACK=1
 ```
 
-If memory pressure is high, reduce `batch_size` first. Avoid changing the model architecture until the TODO implementation is correct and sanity checks pass.
+If memory pressure is high, reduce `batch_size` first. Avoid changing the model architecture until the implementation blocks and sanity checks are understood.
 
 ## Option 2: Run Homework in Nebius Cloud on CUDA GPU
 
@@ -208,22 +203,23 @@ Open:
 src/tiny_transformer_lm.ipynb
 ```
 
-The original device line works in Nebius if CUDA is available:
+The portable device helper should select CUDA automatically:
 
 ```python
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = get_torch_device()
 ```
 
 Recommended Nebius flow:
 
 1. run setup and data cells;
-2. implement all TODO sections;
-3. run each sanity-check cell immediately after its TODO;
-4. train with default hyperparameters;
-5. verify train loss goes below `1.8`;
-6. calculate perplexity and bits per character;
-7. generate text samples;
-8. save the notebook with all cells executed.
+2. review all `# DONE` implementation sections;
+3. run each sanity-check cell;
+4. generate the untrained baseline sample;
+5. train with default hyperparameters;
+6. review the timing summary and verify train loss goes below `1.8`;
+7. calculate perplexity and bits per character;
+8. generate trained text samples;
+9. save the notebook with all cells executed.
 
 ## Running the Other Demo Notebooks
 

@@ -30,9 +30,14 @@ pre-cohort version.
 - Added `docs/RUNNING_DEMOS_AND_HOMEWORK.md` with local Apple Silicon and Nebius Cloud execution paths.
 - Added `docs/MNIST_PARALLEL_HPO_DEMO.md` with local and Nebius Cloud instructions for the MNIST parallel HPO demo.
 - Added `torchvision` to the `uv` environment for the MNIST demo.
+- Added the Tiny LM key-steps image to the README.
 
 ### Changed
 
 - Corrected homework documentation to target `src/tiny_transformer_lm.ipynb` instead of the PEFT demo notebook.
 - Added VS Code/Jupyter kernel troubleshooting steps to the homework assignment document.
 - Anchored generated `/models/` and `/data/` exclusions in `.gitignore`.
+- Updated the Tiny LM notebook to mark completed implementation blocks as `# DONE`.
+- Added an untrained Tiny LM generation sample before training and clarified the before/after generated-text comparison.
+- Updated Tiny LM training timing to report exactly `max_iters` optimizer steps, end-to-end runtime, evaluation time, and train-only throughput.
+- Updated Tiny LM documentation to describe the completed notebook flow, timing summary, and generated-sample outputs.

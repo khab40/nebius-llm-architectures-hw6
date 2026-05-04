@@ -15,6 +15,8 @@ Implement a GPT-style decoder-only Transformer in `src/tiny_transformer_lm.ipynb
 
 The model should learn next-character prediction and generate text that roughly resembles Shakespearean dialogue.
 
+![Tiny LM key steps](img/tiny-lm-key-steps.jpeg)
+
 You will implement:
 
 1. multi-head causal self-attention;
@@ -49,16 +51,17 @@ If you run the demo notebooks, prefer the `uv` environment over notebook-local `
 
 1. Open `src/tiny_transformer_lm.ipynb`.
 2. Run setup and data cells.
-3. Implement each TODO block.
+3. Review each completed `# DONE` implementation block.
 4. Run each sanity-check cell after its corresponding implementation.
-5. Train the model.
-6. Calculate perplexity and bits per character.
-7. Generate sample text.
-8. Save the notebook with all cells executed.
+5. Generate the small untrained baseline sample.
+6. Train the model and review the timing summary.
+7. Calculate perplexity and bits per character.
+8. Generate final sample text.
+9. Save the notebook with all cells executed.
 
 ## Expected Outputs
 
-After successful homework execution, the notebook should show passing sanity checks, training logs, final loss values, perplexity metrics, and generated text samples.
+After successful homework execution, the notebook should show passing sanity checks, an untrained baseline sample, training logs, a timing summary, final loss values, perplexity metrics, and trained generated text samples.
 
 ## Demo Flows
 
